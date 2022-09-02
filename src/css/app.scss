@@ -1,0 +1,62 @@
+body {
+  background: linear-gradient(
+    168.58deg,
+    #505add 34.4%,
+    #be40c0 56.11%,
+    #fba82b 96.37%
+  );
+}
+
+// terminal Page
+.nav-button {
+  position: absolute;
+  left: 274px;
+  top: 1500px;
+}
+.touch-container {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0);
+  right: 89px;
+  top: 207px;
+}
+
+// index page
+.st0 {
+  fill: #ffffff;
+}
+.yaga {
+  position: absolute;
+  left: 200px;
+  top: 500px;
+}
+
+// setup layout
+.main-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+// poster component
+::-webkit-scrollbar {
+  display: none;
+}
+.bg-black {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 1080px;
+  height: 1920px;
+}
+.afish {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  overflow: hidden;
+}
+.carusel {
+  background-color: #00000000;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+}
