@@ -519,37 +519,66 @@ export default defineComponent({
       save() {
         if (ioStore.connect) {
           if (mainSetup.value.id == '') {
-            const newTerminal = new User({ roles: 'new-user' });
-
-            newTerminal.email = mainSetup.value.name;
-            newTerminal.password = mainSetup.value.password;
-            newTerminal.timeStamp = Math.floor(Date.now() / 1000);
-            newTerminal.setup = {
-              useShadule: {
-                state: mainSetup.value.useShadule,
-                onTime: mainSetup.value.onTime,
-                offTime: mainSetup.value.offTime,
-              },
-              backTime: mainSetup.value.backTime,
-              playlist: playlist.value,
-            };
-            newTerminal
-              .save()
-              .then((terminal) => {
-                mainSetup.value.id = terminal._id;
-                mainSetup.value.playlist = playlist.value;
-                auth
-                  .authenticate({
-                    strategy: 'local',
-                    email: mainSetup.value.name,
-                    password: mainSetup.value.password,
-                  })
-                  .then(() => {
+            auth
+              .authenticate({
+                strategy: 'local',
+                email: mainSetup.value.name,
+                password: mainSetup.value.password,
+              })
+              .then(() => {
+                LocalStorage.set('setup', mainSetup.value);
+                router.push({ name: 'MenuPage' });
+              })
+              .catch((error) => {
+                console.log('error', error);
+                $q.notify({
+                  color: 'red-5',
+                  textColor: 'white',
+                  icon: 'warning',
+                  message: 'Добавлен новый пользователь' + error.message,
+                  position: 'top',
+                });
+                //
+                const newTerminal = new User({ roles: 'terminal' });
+                newTerminal.email = mainSetup.value.name;
+                newTerminal.password = mainSetup.value.password;
+                newTerminal.timeStamp = Math.floor(Date.now() / 1000);
+                newTerminal.setup = {
+                  useShadule: {
+                    state: mainSetup.value.useShadule,
+                    onTime: mainSetup.value.onTime,
+                    offTime: mainSetup.value.offTime,
+                  },
+                  backTime: mainSetup.value.backTime,
+                  playlist: playlist.value,
+                };
+                newTerminal
+                  .save()
+                  .then((terminal) => {
+                    mainSetup.value.id = terminal._id;
+                    mainSetup.value.playlist = playlist.value;
                     LocalStorage.set('setup', mainSetup.value);
-                    router.push({ name: 'MenuPage' });
+                    auth
+                      .authenticate({
+                        strategy: 'local',
+                        email: mainSetup.value.name,
+                        password: mainSetup.value.password,
+                      })
+                      .then(() => {
+                        router.push({ name: 'MenuPage' });
+                      })
+                      .catch((error) => {
+                        console.log('error', error);
+                        $q.notify({
+                          color: 'red-5',
+                          textColor: 'white',
+                          icon: 'warning',
+                          message: error.message,
+                          position: 'top',
+                        });
+                      });
                   })
                   .catch((error) => {
-                    console.log('error', error);
                     $q.notify({
                       color: 'red-5',
                       textColor: 'white',
@@ -558,15 +587,6 @@ export default defineComponent({
                       position: 'top',
                     });
                   });
-              })
-              .catch((error) => {
-                $q.notify({
-                  color: 'red-5',
-                  textColor: 'white',
-                  icon: 'warning',
-                  message: error.message,
-                  position: 'top',
-                });
               });
           } else {
             mainSetup.value.playlist = playlist.value;
