@@ -7,10 +7,10 @@ import { LocalStorage } from 'quasar';
 import { electronApi } from 'src/api/electron-api';
 import { api } from 'src/store/';
 import { useAuth } from 'src/store/services/auth';
-import { User, useUsers } from 'src/store/services/users';
+// import { User, useUsers } from 'src/store/services/users';
 
 import { useStore } from 'src/store/connection';
-import { useGet } from 'feathers-pinia';
+// import { useGet } from 'feathers-pinia';
 
 export default defineComponent({
   name: 'App',
@@ -19,9 +19,9 @@ export default defineComponent({
     const ioStore = useStore();
 
     const auth = useAuth();
-    const userStore = useUsers();
+    // const userStore = useUsers();
 
-    const idT = ref(null);
+    // const idT = ref(null);
 
     // const userID = computed(() => {
     //   if (idT) {
@@ -32,14 +32,14 @@ export default defineComponent({
     // });
     // const tesminalUser = new User();
 
-    const { item: tesminalUser, isPending } = useGet({
-      model: userStore.Model,
-      id: idT,
-    });
+    // const { item: tesminalUser, isPending } = useGet({
+    //   model: userStore.Model,
+    //   id: idT,
+    // });
 
-    watch(tesminalUser, (usr) => {
-      console.log('watch user', usr);
-    });
+    // watch(tesminalUser, (usr) => {
+    //   console.log('watch user', usr);
+    // });
 
     onMounted(() => {
       LocalStorage.set('startTime', new Date());
@@ -59,8 +59,8 @@ export default defineComponent({
       auth
         .authenticate()
         .then((val) => {
-          console.log('auth status', tesminalUser);
-          idT.value = val.user._id;
+          console.log('auth status', val);
+          // idT.value = val.user._id;
           // userStore.get(val.user._id).then((terminal) => {
           //   tesminalUser.value = terminal;
           // });

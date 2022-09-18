@@ -5,6 +5,11 @@ import os from 'os';
 // const DeltaUpdater = require('@electron-delta/updater');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
+const DownloadManager = require('electron-download-manager');
+
+DownloadManager.register({
+  downloadFolder: app.getPath('downloads') + '/DownloadPlaylist',
+});
 
 // log
 autoUpdater.logger = log;
@@ -175,4 +180,32 @@ ipcMain.on('closeDevTools', () => {
 // showDevTools
 ipcMain.on('showDevTools', () => {
   mainWindow.webContents.openDevTools({ mode: 'detach' });
+});
+
+// download posters
+ipcMain.on('download-files', function (event, arg) {
+  log.info('link mainprocess', arg);
+  DownloadManager.bulkDownload(
+    {
+      urls: arg,
+      path: 'bulk-download',
+    },
+    function (error, finished, errors) {
+      if (error) {
+        console.log();
+        // log.info("finished: " + finished);
+        console.log('errors: ' + errors);
+        // log.info("errors: " + errors);
+        return;
+      }
+
+      // console.log("all finished");
+      log.info(
+        'all finished',
+        finished,
+        app.getPath('downloads') + '/DownloadPlaylist'
+      );
+      event.sender.send('all_finished');
+    }
+  );
 });

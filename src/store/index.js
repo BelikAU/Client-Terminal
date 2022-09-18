@@ -20,6 +20,12 @@ const socket = io('http://' + ip, {
   },
 });
 
+export default store((/* { ssrContext } */) => {
+  const pinia = createPinia();
+  // You can add Pinia plugins here
+  return pinia;
+});
+
 // This variable name becomes the alias for this server.
 export const api = feathers()
   .configure(socketio(socket))
@@ -28,10 +34,4 @@ export const api = feathers()
 export const { defineStore, BaseModel } = setupFeathersPinia({
   clients: { api },
   idField: '_id',
-});
-
-export default store((/* { ssrContext } */) => {
-  const pinia = createPinia();
-  // You can add Pinia plugins here
-  return pinia;
 });

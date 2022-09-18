@@ -52,22 +52,26 @@ contextBridge.exposeInMainWorld('electronApi', {
     });
     return response.filePaths;
   },
+
   reboot: () => {
     shutdown.reboot({
       timerseconds: 10,
     });
     return 'reboot';
   },
+
   shutdown: () => {
     shutdown.shutdown({
       timerseconds: 10,
     });
     return 'shutdown';
   },
+
   restartApp: () => {
     ipcRenderer.send('relaunch');
     return 'restart';
   },
+
   networkInterfaces: () => {
     const opts = {
       reply_markup: {
@@ -78,6 +82,7 @@ contextBridge.exposeInMainWorld('electronApi', {
     const response = os.networkInterfaces();
     return response;
   },
+
   disableTouch: (val) => {
     console.log('touchSens', val);
     // let tim = store.get('terminal_name');
@@ -90,11 +95,13 @@ contextBridge.exposeInMainWorld('electronApi', {
     }
     return val;
   },
+
   runExplorer: () => {
     console.log('explorer');
     shell.showItemInFolder('C:\\TerminalApps\\PlayList');
     return 'explorer';
   },
+
   runTuning: () => {
     console.log('iliTuningTool');
     child(executTunungPath, function (err, data) {
@@ -104,6 +111,7 @@ contextBridge.exposeInMainWorld('electronApi', {
       return 'iliTuningTool';
     });
   },
+
   displayOff: () => {
     console.log('display off');
     exec(
@@ -118,30 +126,31 @@ contextBridge.exposeInMainWorld('electronApi', {
       }
     );
   },
+
   displayOn: () => {
     console.log('display on');
     sendkeys('foobar').then(() => console.log('success'));
-    // exec(
-    //   'powershell.exe [System.Reflection.Assembly]::LoadWithPartialName(\\"System.Windows.Forms\\");\' System.Windows.Forms.SendKeys.SendWait(\\"Hello\\")',
-    //   // { shell: 'powershell.exe' },
-    //   (error, stdout, stderr) => {
-    //     if (error) {
-    //       console.error(`exec error: ${error}`);
-    //       return;
-    //     }
-    //     console.log(`stdout: ${stdout}`);
-    //     console.error(`stderr: ${stderr}`);
-    //   }
-    // );
   },
+
   showDevTools: () => {
     console.log('app version', app.getVersion());
     ipcRenderer.send('showDevTools');
   },
+
   closeDevTools: () => {
     ipcRenderer.send('closeDevTools');
   },
+
   getPath: () => {
     return path.resolve(__dirname, process.env.QUASAR_PUBLIC_FOLDER);
+  },
+
+  // upload files
+  sendLinkToDownload: (links) => {
+    ipcRenderer.send('download-files', links);
+    ipcRenderer.on('all_finished', function (event) {
+      console.log('download_finished', event); // "name"
+      return 'download';
+    });
   },
 });

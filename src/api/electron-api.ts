@@ -21,6 +21,7 @@ export interface ElectronApi {
   displayOn: () => string[];
   displayOff: () => string[];
   getPath: () => string[];
+  sendLinkToDownload: (linls: string[]) => string[];
 }
 
 // @ts-ignore
