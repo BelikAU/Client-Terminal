@@ -147,10 +147,11 @@ contextBridge.exposeInMainWorld('electronApi', {
 
   // upload files
   sendLinkToDownload: (links) => {
-    ipcRenderer.send('download-files', links);
-    ipcRenderer.on('all_finished', function (event) {
-      console.log('download_finished', event); // "name"
-      return 'download';
+    return new Promise((resolve) => {
+      ipcRenderer.send('download-files', links);
+      ipcRenderer.on('all_finished', (event, result) => {
+        resolve(result);
+      });
     });
   },
 });

@@ -8,7 +8,7 @@ const { autoUpdater } = require('electron-updater');
 const DownloadManager = require('electron-download-manager');
 
 DownloadManager.register({
-  downloadFolder: app.getPath('downloads') + '/DownloadPlaylist',
+  downloadFolder: app.getPath('userData') + '/DownloadPlaylist',
 });
 
 // log
@@ -184,28 +184,21 @@ ipcMain.on('showDevTools', () => {
 
 // download posters
 ipcMain.on('download-files', function (event, arg) {
-  log.info('link mainprocess', arg);
+  // log.info('link mainprocess', arg);
   DownloadManager.bulkDownload(
     {
       urls: arg,
-      path: 'bulk-download',
     },
     function (error, finished, errors) {
       if (error) {
-        console.log();
-        // log.info("finished: " + finished);
-        console.log('errors: ' + errors);
-        // log.info("errors: " + errors);
+        log.info('errors: ' + errors);
         return;
       }
 
-      // console.log("all finished");
-      log.info(
-        'all finished',
-        finished,
-        app.getPath('downloads') + '/DownloadPlaylist'
-      );
-      event.sender.send('all_finished');
+      const downloadPath = app.getPath('userData');
+
+      log.info('all finished', finished, downloadPath);
+      event.sender.send('all_finished', { finished, downloadPath });
     }
   );
 });
