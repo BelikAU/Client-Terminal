@@ -145,11 +145,15 @@ contextBridge.exposeInMainWorld('electronApi', {
     return path.resolve(__dirname, process.env.QUASAR_PUBLIC_FOLDER);
   },
 
+  getDownloadPath: () => {
+    return app.getPath('userData');
+  },
+
   // upload files
   sendLinkToDownload: (links) => {
     return new Promise((resolve) => {
       ipcRenderer.send('download-files', links);
-      ipcRenderer.on('all_finished', (event, result) => {
+      ipcRenderer.on('download-finished', (event, result) => {
         resolve(result);
       });
     });

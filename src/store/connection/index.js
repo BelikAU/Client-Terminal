@@ -5,6 +5,7 @@ export const useStore = defineStore({
   state: () => ({
     connect: false,
     error: null,
+    playlistDate: 0,
   }),
   getters: {
     getConnection: (state) => {
@@ -14,6 +15,9 @@ export const useStore = defineStore({
   actions: {
     setConnection(val) {
       this.connect = val;
+    },
+    playlistUpdated(date) {
+      this.playlistDate = date;
     },
   },
 });

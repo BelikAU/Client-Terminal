@@ -117,11 +117,10 @@
             </q-card-section>
 
             <q-card-section class="q-pt-none">
-              <q-tree :nodes="[playlist]" node-key="label" default-expand-all>
-                <template v-slot:header-root="prop">
+              <q-tree :nodes="[playlist]" node-key="_id" default-expand-all>
+                <!-- <template v-slot:header-root="prop">
                   <div class="row items-center full-width text-white">
                     <div class="col-auto">
-                      <!-- <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg" class="q-mr-sm" style="width:50px;height:50px" /> -->
                       <q-icon
                         name="mdi-playlist-play"
                         color="orange"
@@ -133,12 +132,37 @@
                       {{ prop.node.label }}
                     </div>
                   </div>
-                </template>
+                </template> -->
                 <template v-slot:header-generic="prop">
                   <div class="items-center text-white">
                     <div class="row">
                       <q-icon
-                        :name="prop.node.icon || 'share'"
+                        :name="getTypeIcon(prop.node.data.type)"
+                        color="primary"
+                        size="18px"
+                        class="q-mr-sm"
+                      />
+                      <div class="text-body2">{{ prop.node.label }}</div>
+                    </div>
+                    <div class="row" v-if="prop.node.data.type !== 'playlist'">
+                      <div class="text-caption">
+                        {{ getTime(prop.node.data.lastModified) }}
+                      </div>
+                      <div class="text-caption q-pl-sm">
+                        {{ getSize(prop.node.data.size) }}
+                      </div>
+                      <div
+                        v-if="prop.node.data.duration"
+                        class="text-caption q-pl-sm"
+                      >
+                        {{ prop.node.data.duration }}сек
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="items-center text-white">
+                    <div class="row">
+                      <q-icon
+                        :name="prop.node.data.type || 'share'"
                         color="orange"
                         size="18px"
                         class="q-mr-sm"
@@ -148,11 +172,11 @@
                     <div class="col">
                       <div class="text-caption">
                         {{ getItemPath(prop.node.data.link) }}
-                      </div>
-                      <!-- <div class="text-caption">
+                      </div> -->
+                  <!-- <div class="text-caption">
                           {{ prop.node.data.resolution }}
                         </div> -->
-                      <div class="text-caption" v-if="prop.node.data.loop">
+                  <!-- <div class="text-caption" v-if="prop.node.data.loop">
                         <q-icon name="mdi-repeat" size="14px" />
                       </div>
                       <div
@@ -160,14 +184,14 @@
                         v-if="prop.node.data.duration > 0"
                       >
                         {{ prop.node.data.duration }} секунд.
-                      </div>
-                    </div>
-                  </div>
+                      </div> -->
+                  <!-- </div>
+                  </div> -->
                 </template>
               </q-tree>
             </q-card-section>
 
-            <q-card-actions align="right" class="">
+            <q-card-actions align="right">
               <q-btn color="orange" flat label="OK" v-close-popup />
             </q-card-actions>
           </q-card>
@@ -290,7 +314,7 @@
 <script>
 import { defineComponent, onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useQuasar, LocalStorage, date } from 'quasar';
+import { useQuasar, LocalStorage, date, format } from 'quasar';
 import { useStore } from 'src/store/connection';
 // service
 import { api } from 'src/store/';
@@ -325,134 +349,34 @@ export default defineComponent({
     const defalutPlaylist = [
       {
         label: 'NO POSTER',
-        header: 'root',
+        header: 'generic',
+        data: { type: 'playlist', timestamp: 1663678405420 },
         children: [
           {
-            id: '0',
+            _id: '0',
             label: 'image 1',
             header: 'generic',
-            icon: 'mdi-file-image',
             data: {
               link: 'file:///C:///TerminalApps//PlayList//error.png',
-              type: 'image',
-              resolution: '1920x1080px',
-              duration: 0,
-              loop: true,
+              type: 'image/png',
+              duration: 20,
             },
           },
         ],
       },
       {
         label: 'Default MP4',
-        header: 'root',
+        header: 'generic',
+        data: { type: 'playlist', timestamp: 1663678405420 },
         children: [
           {
-            id: '0',
-            header: 'generic',
+            _id: '1',
             label: 'default video',
-            icon: 'mdi-filmstrip',
+            header: 'generic',
             data: {
               link: 'file:///C:///TerminalApps//PlayList//default.mp4',
-              type: 'video',
-              resolution: '1920x1080px',
+              type: 'video/mp4',
               duration: 0,
-              loop: true,
-            },
-          },
-        ],
-      },
-      {
-        label: 'Default PNG',
-        header: 'root',
-        children: [
-          {
-            id: '0',
-            label: 'image 1',
-            header: 'generic',
-            icon: 'mdi-file-image',
-            data: {
-              link: 'file:///C:///TerminalApps//PlayList//default.png',
-              type: 'image',
-              resolution: '1920x1080px',
-              duration: 0,
-              loop: true,
-            },
-          },
-        ],
-      },
-      {
-        label: 'Default JPG',
-        header: 'root',
-        children: [
-          {
-            id: '0',
-            label: 'image 1',
-            header: 'generic',
-            icon: 'mdi-file-image',
-            data: {
-              link: 'file:///C:///TerminalApps//PlayList//default.jpg',
-              type: 'image',
-              resolution: '1920x1080px',
-              duration: 0,
-              loop: true,
-            },
-          },
-        ],
-      },
-      {
-        label: 'Test Playlist',
-        header: 'root',
-        children: [
-          {
-            id: '0',
-            header: 'generic',
-            label: 'clip 1 video',
-            icon: 'mdi-filmstrip',
-            data: {
-              link: 'file:///C:///TerminalApps//PlayList//default2.mp4',
-              type: 'video',
-              resolution: '1080x1920px',
-              duration: 0,
-              loop: false,
-            },
-          },
-          {
-            id: '1',
-            label: 'image 2',
-            header: 'generic',
-            icon: 'mdi-file-image',
-            data: {
-              link: 'file:///C:///TerminalApps//PlayList//1.jpg',
-              type: 'image',
-              resolution: '1920x1080px',
-              duration: 30,
-              loop: false,
-            },
-          },
-          {
-            id: '2',
-            header: 'generic',
-            label: 'clip 2 video',
-            icon: 'mdi-filmstrip',
-            data: {
-              link: 'file:///C:///TerminalApps//PlayList//default3.mp4',
-              type: 'video',
-              resolution: '1080x1920px',
-              duration: 0,
-              loop: false,
-            },
-          },
-          {
-            id: '3',
-            label: 'image 1',
-            header: 'generic',
-            icon: 'mdi-file-image',
-            data: {
-              link: 'file:///C:///TerminalApps//PlayList//2.jpg',
-              type: 'image',
-              resolution: '1920x1080px',
-              duration: 30,
-              loop: false,
             },
           },
         ],
@@ -467,19 +391,17 @@ export default defineComponent({
 
     const playlist = ref({
       label: 'NO POSTER',
-      header: 'root',
+      header: 'generic',
+      data: { type: 'playlist', timestamp: 1663678405420 },
       children: [
         {
-          id: '0',
+          _id: '0',
           label: 'image 1',
           header: 'generic',
-          icon: 'mdi-file-image',
           data: {
             link: 'file:///C:///TerminalApps//PlayList//error.png',
-            type: 'image',
-            resolution: '1920x1080px',
-            duration: 0,
-            loop: true,
+            type: 'image/png',
+            duration: 20,
           },
         },
       ],
@@ -491,6 +413,12 @@ export default defineComponent({
       if (LocalStorage.has('setup')) {
         mainSetup.value = LocalStorage.getItem('setup');
         playlist.value = mainSetup.value.playlist;
+      }
+
+      if (LocalStorage.has('playlist')) {
+        playlistOptions.value = LocalStorage.getItem('playlist');
+      } else {
+        playlistOptions.value = defalutPlaylist;
       }
 
       // display time
@@ -615,6 +543,7 @@ export default defineComponent({
           router.push({ name: 'MenuPage' });
         }
       },
+
       clear() {
         $q.dialog({
           dark: true,
@@ -642,6 +571,21 @@ export default defineComponent({
         const sdf = pathArr.slice(-2);
         return sdf[0] + ' / ' + sdf[1];
         // return val;
+      },
+      getTypeIcon(type) {
+        if (type == 'image/jpeg' || type == 'image/png') {
+          return 'mdi-file-image';
+        } else if (type == 'video/mp4' || type == 'video/quicktime') {
+          return 'mdi-filmstrip';
+        } else {
+          return 'mdi-playlist-play';
+        }
+      },
+      getSize(val) {
+        return format.humanStorageSize(Number(val));
+      },
+      getTime(timeStamp) {
+        return date.formatDate(timeStamp, 'DD.MM.YYYY HH:mm');
       },
     };
   },

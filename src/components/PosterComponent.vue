@@ -13,11 +13,14 @@
     >
       <q-carousel-slide
         v-for="slide in playList.children"
-        :key="slide.id"
-        :name="slide.id"
+        :key="slide._id"
+        :name="slide._id"
       >
         <video
-          v-if="slide.data.type == 'video'"
+          v-if="
+            slide.data.type == 'video/mp4' ||
+            slide.data.type == 'video/quicktime'
+          "
           :src="slide.data.link"
           class="absolute-full"
           preload="auto"
@@ -29,7 +32,9 @@
           @ended="onEnd()"
         />
         <q-img
-          v-else
+          v-else-if="
+            slide.data.type == 'image/png' || slide.data.type == 'image/jpeg'
+          "
           class="absolute-full"
           :src="slide.data.link"
           width="1080"
@@ -42,19 +47,31 @@
 
 <script>
 import { LocalStorage } from 'quasar';
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, watch } from 'vue';
+import { useStore } from 'src/store/connection';
 
 export default defineComponent({
   name: 'PosterComponent',
   setup(props) {
     const slide = ref(4);
     const poster = ref(null);
+    const store = useStore();
 
     const playList = ref(LocalStorage.getItem('setup').playlist);
 
     onMounted(() => {
       poster.value.next();
     });
+
+    watch(
+      () => store.playlistDate,
+      (val) => {
+        // console.log('playlistDate updated', val);
+        playList.value = LocalStorage.getItem('setup').playlist;
+        slide.value = 0;
+        poster.value.next();
+      }
+    );
 
     return {
       slide,

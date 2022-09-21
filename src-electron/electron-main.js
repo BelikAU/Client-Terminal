@@ -8,7 +8,7 @@ const { autoUpdater } = require('electron-updater');
 const DownloadManager = require('electron-download-manager');
 
 DownloadManager.register({
-  downloadFolder: app.getPath('userData') + '/DownloadPlaylist',
+  downloadFolder: app.getPath('userData') + '/upload',
 });
 
 // log
@@ -195,10 +195,10 @@ ipcMain.on('download-files', function (event, arg) {
         return;
       }
 
-      const downloadPath = app.getPath('userData');
+      // const downloadPath = app.getPath('userData');
 
-      log.info('all finished', finished, downloadPath);
-      event.sender.send('all_finished', { finished, downloadPath });
+      log.info('all finished', finished);
+      event.sender.send('download-finished');
     }
   );
 });
