@@ -13,8 +13,8 @@
     >
       <q-carousel-slide
         v-for="slide in playList.children"
-        :key="slide._id"
-        :name="slide._id"
+        :key="slide.label"
+        :name="slide.label"
       >
         <video
           v-if="
@@ -27,7 +27,7 @@
           no-controls
           autoplay
           playsinline
-          :loop="slide.data.loop"
+          loop
           muted
           @ended="onEnd()"
         />

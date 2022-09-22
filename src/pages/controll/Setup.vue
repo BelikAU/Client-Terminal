@@ -94,7 +94,7 @@
             class="col"
             filled
             dark
-            v-model="playlist"
+            v-model="mainSetup.playlist"
             hint="Плей лист"
             :options="playlistOptions"
             behavior="dialog"
@@ -302,7 +302,7 @@
               size="16px"
               icon="mdi-check"
               label="Сохранить"
-              @click="save()"
+              @click="saveSetup()"
             />
           </div>
         </div>
@@ -333,6 +333,30 @@ export default defineComponent({
 
     const playlistDialog = ref(false);
 
+    const ioStore = useStore();
+    const connecting = ref(false);
+
+    const time = ref(null);
+    let timeTimer;
+
+    const playlist = {
+      label: 'NO POSTER',
+      header: 'generic',
+      data: { type: 'playlist', timestamp: 1663678405420 },
+      children: [
+        {
+          _id: '0',
+          label: 'image 1',
+          header: 'generic',
+          data: {
+            link: 'file:///C:///TerminalApps//PlayList//error.png',
+            type: 'image/png',
+            duration: 20,
+          },
+        },
+      ],
+    };
+
     const defaultSetup = {
       id: '',
       name: 'new-user',
@@ -341,12 +365,12 @@ export default defineComponent({
       offTime: '23:00',
       useShadule: false,
       backTime: 30,
-      playlist: '',
+      playlist: playlist,
       ip: 'localhost:3030',
     };
     const mainSetup = ref(defaultSetup);
 
-    const defalutPlaylist = [
+    const defalutPlaylists = [
       {
         label: 'NO POSTER',
         header: 'generic',
@@ -383,42 +407,17 @@ export default defineComponent({
       },
     ];
 
-    const ioStore = useStore();
-    const connecting = ref(false);
-
-    const time = ref(null);
-    let timeTimer;
-
-    const playlist = ref({
-      label: 'NO POSTER',
-      header: 'generic',
-      data: { type: 'playlist', timestamp: 1663678405420 },
-      children: [
-        {
-          _id: '0',
-          label: 'image 1',
-          header: 'generic',
-          data: {
-            link: 'file:///C:///TerminalApps//PlayList//error.png',
-            type: 'image/png',
-            duration: 20,
-          },
-        },
-      ],
-    });
-    const playlistOptions = ref(defalutPlaylist);
+    const playlistOptions = ref(defalutPlaylists);
 
     onMounted(() => {
-      // online.value = api.io.connected;
       if (LocalStorage.has('setup')) {
         mainSetup.value = LocalStorage.getItem('setup');
-        playlist.value = mainSetup.value.playlist;
       }
 
       if (LocalStorage.has('playlist')) {
         playlistOptions.value = LocalStorage.getItem('playlist');
       } else {
-        playlistOptions.value = defalutPlaylist;
+        playlistOptions.value = defalutPlaylists;
       }
 
       // display time
@@ -432,6 +431,122 @@ export default defineComponent({
       clearInterval(timeTimer);
     });
 
+    // save setup data
+
+    function saveSetup() {
+      if (ioStore.connect) {
+        if (mainSetup.value.id == '') {
+          auth
+            .authenticate({
+              strategy: 'local',
+              email: mainSetup.value.name,
+              password: mainSetup.value.password,
+            })
+            .then((auth) => {
+              LocalStorage.set('setup', mainSetup.value);
+              //
+              updateServerUser(auth.user);
+              // updateLocalUser();
+              console.log('mainSetup.value.id == ', auth.user);
+              router.push({ name: 'MenuPage' });
+            })
+            .catch((error) => {
+              console.log('error auth', error);
+              $q.notify({
+                color: 'red-5',
+                textColor: 'white',
+                icon: 'warning',
+                message: 'Неверное имя или пароль.',
+                position: 'top',
+              });
+              //
+              // const newTerminal = new User({ roles: 'terminal' });
+              // newTerminal.email = mainSetup.value.name;
+              // newTerminal.password = mainSetup.value.password;
+              // newTerminal.timeStamp = Math.floor(Date.now() / 1000);
+              // newTerminal.setup = {
+              //   useShadule: {
+              //     state: mainSetup.value.useShadule,
+              //     onTime: mainSetup.value.onTime,
+              //     offTime: mainSetup.value.offTime,
+              //   },
+              //   backTime: mainSetup.value.backTime,
+              //   playlist: mainSetup.value.playlist,
+              // };
+              // newTerminal
+              //   .save()
+              //   .then((terminal) => {
+              //     mainSetup.value.id = terminal._id;
+              //     // mainSetup.value.playlist = playlist.value;
+              //     LocalStorage.set('setup', mainSetup.value);
+              //     auth
+              //       .authenticate({
+              //         strategy: 'local',
+              //         email: mainSetup.value.name,
+              //         password: mainSetup.value.password,
+              //       })
+              //       .then(() => {
+              //         router.push({ name: 'MenuPage' });
+              //       })
+              //       .catch((error) => {
+              //         console.log('error', error);
+              //         $q.notify({
+              //           color: 'red-5',
+              //           textColor: 'white',
+              //           icon: 'warning',
+              //           message: error.message,
+              //           position: 'top',
+              //         });
+              //       });
+              //   })
+              //   .catch((error) => {
+              //     $q.notify({
+              //       color: 'red-5',
+              //       textColor: 'white',
+              //       icon: 'warning',
+              //       message: error.message,
+              //       position: 'top',
+              //     });
+              //   });
+            });
+        } else {
+          // mainSetup.value.playlist = playlist.value;
+          LocalStorage.set('setup', mainSetup.value);
+
+          // update treminal service
+          userStore.get(mainSetup.value.id).then((terminal) => {
+            terminal.email = mainSetup.value.name;
+            terminal.password = mainSetup.value.password;
+            terminal.timeStamp = Math.floor(Date.now() / 1000);
+            terminal.setup = {
+              useShadule: {
+                state: mainSetup.value.useShadule,
+                onTime: mainSetup.value.onTime,
+                offTime: mainSetup.value.offTime,
+              },
+              backTime: mainSetup.value.backTime,
+              playlist: mainSetup.value.playlist,
+            };
+            terminal.patch();
+          });
+
+          router.push({ name: 'MenuPage' });
+        }
+      } else {
+        // mainSetup.value.playlist = playlist.value;
+        LocalStorage.set('setup', mainSetup.value);
+        router.push({ name: 'MenuPage' });
+      }
+    }
+
+    function updateServerUser(user) {
+      console.log('user from auth', user);
+      // user.setup = mainSetup.value;
+      // user.patch();
+    }
+
+    function updateLocalUserSetup() {}
+
     return {
       ioStore,
       auth,
@@ -442,108 +557,7 @@ export default defineComponent({
       playlistDialog,
       playlist,
       playlistOptions,
-      save() {
-        if (ioStore.connect) {
-          if (mainSetup.value.id == '') {
-            auth
-              .authenticate({
-                strategy: 'local',
-                email: mainSetup.value.name,
-                password: mainSetup.value.password,
-              })
-              .then(() => {
-                LocalStorage.set('setup', mainSetup.value);
-                router.push({ name: 'MenuPage' });
-              })
-              .catch((error) => {
-                console.log('error', error);
-                $q.notify({
-                  color: 'red-5',
-                  textColor: 'white',
-                  icon: 'warning',
-                  message: 'Добавлен новый пользователь' + error.message,
-                  position: 'top',
-                });
-                //
-                const newTerminal = new User({ roles: 'terminal' });
-                newTerminal.email = mainSetup.value.name;
-                newTerminal.password = mainSetup.value.password;
-                newTerminal.timeStamp = Math.floor(Date.now() / 1000);
-                newTerminal.setup = {
-                  useShadule: {
-                    state: mainSetup.value.useShadule,
-                    onTime: mainSetup.value.onTime,
-                    offTime: mainSetup.value.offTime,
-                  },
-                  backTime: mainSetup.value.backTime,
-                  playlist: playlist.value,
-                };
-                newTerminal
-                  .save()
-                  .then((terminal) => {
-                    mainSetup.value.id = terminal._id;
-                    mainSetup.value.playlist = playlist.value;
-                    LocalStorage.set('setup', mainSetup.value);
-                    auth
-                      .authenticate({
-                        strategy: 'local',
-                        email: mainSetup.value.name,
-                        password: mainSetup.value.password,
-                      })
-                      .then(() => {
-                        router.push({ name: 'MenuPage' });
-                      })
-                      .catch((error) => {
-                        console.log('error', error);
-                        $q.notify({
-                          color: 'red-5',
-                          textColor: 'white',
-                          icon: 'warning',
-                          message: error.message,
-                          position: 'top',
-                        });
-                      });
-                  })
-                  .catch((error) => {
-                    $q.notify({
-                      color: 'red-5',
-                      textColor: 'white',
-                      icon: 'warning',
-                      message: error.message,
-                      position: 'top',
-                    });
-                  });
-              });
-          } else {
-            mainSetup.value.playlist = playlist.value;
-            LocalStorage.set('setup', mainSetup.value);
-
-            // update treminal service
-            userStore.get(mainSetup.value.id).then((terminal) => {
-              terminal.email = mainSetup.value.name;
-              terminal.password = mainSetup.value.password;
-              terminal.timeStamp = Math.floor(Date.now() / 1000);
-              terminal.setup = {
-                useShadule: {
-                  state: mainSetup.value.useShadule,
-                  onTime: mainSetup.value.onTime,
-                  offTime: mainSetup.value.offTime,
-                },
-                backTime: mainSetup.value.backTime,
-                playlist: playlist.value,
-              };
-              terminal.patch();
-            });
-
-            router.push({ name: 'MenuPage' });
-          }
-        } else {
-          mainSetup.value.playlist = playlist.value;
-          LocalStorage.set('setup', mainSetup.value);
-          router.push({ name: 'MenuPage' });
-        }
-      },
-
+      saveSetup,
       clear() {
         $q.dialog({
           dark: true,
@@ -572,6 +586,7 @@ export default defineComponent({
         return sdf[0] + ' / ' + sdf[1];
         // return val;
       },
+
       getTypeIcon(type) {
         if (type == 'image/jpeg' || type == 'image/png') {
           return 'mdi-file-image';
@@ -581,9 +596,11 @@ export default defineComponent({
           return 'mdi-playlist-play';
         }
       },
+
       getSize(val) {
         return format.humanStorageSize(Number(val));
       },
+
       getTime(timeStamp) {
         return date.formatDate(timeStamp, 'DD.MM.YYYY HH:mm');
       },

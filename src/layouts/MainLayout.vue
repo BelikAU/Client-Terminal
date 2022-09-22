@@ -1,9 +1,9 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <div v-show="false" style="background: #000">
-      <div style="color: #fff">{{ downloaded }}</div>
-      <!-- <div style="color: #ccc">{{ user.setup.playlist }}</div> -->
-      <div style="color: #aaa">{{ user }}</div>
+    <div style="background: #000">
+      <!-- <div style="color: #fff">{{ downloaded }}</div> -->
+      <div style="color: #ccc; font-size: 20px">{{ pl }}</div>
+      <div style="color: #aaa; font-size: 20px">{{ user }}</div>
     </div>
     <q-page-container>
       <router-view />
@@ -68,12 +68,6 @@ export default defineComponent({
       },
     ];
 
-    const params = computed(() => {
-      return {
-        query: {},
-      };
-    });
-
     const userID = computed(() => {
       if (auth.user) {
         return auth.user._id;
@@ -82,14 +76,20 @@ export default defineComponent({
       }
     });
 
-    const { items: pl } = useFind({
-      model: playlist.Model,
-      params,
-    });
-
     const { item: user } = useGet({
       model: users.Model,
       id: userID,
+    });
+
+    const params = computed(() => {
+      return {
+        query: {},
+      };
+    });
+
+    const { items: pl } = useFind({
+      model: playlist.Model,
+      params,
     });
 
     const downloadPath = electronApi.getDownloadPath();
