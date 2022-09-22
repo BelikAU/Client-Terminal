@@ -1,9 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <div style="background: #000">
-      <!-- <div style="color: #fff">{{ downloaded }}</div> -->
-      <div style="color: #ccc; font-size: 20px">{{ pl }}</div>
-      <div style="color: #aaa; font-size: 20px">{{ user }}</div>
+    <div class="invisible-font">
+      <div>{{ pl }}</div>
+      <div>{{ user }}</div>
     </div>
     <q-page-container>
       <router-view />
@@ -14,21 +13,27 @@
 <script>
 import { LocalStorage } from 'quasar';
 import { defineComponent, ref, computed, watch } from 'vue';
-import { usePlaylist } from 'src/store/services/playlist';
+import { useFind, useGet } from 'feathers-pinia';
+
+import { electronApi } from 'src/api/electron-api';
+
 import { useAuth } from 'src/store/services/auth';
 import { useUsers } from 'src/store/services/users';
-import { useFind, useGet } from 'feathers-pinia';
-import { electronApi } from 'src/api/electron-api';
-import { useStore } from 'src/store/connection';
-// import { some } from 'lodash';
+import { usePlaylist } from 'src/store/services/playlist';
+
+import { useStore } from 'src/store/app';
 
 export default defineComponent({
   name: 'MainLayout',
   setup() {
-    const playlist = usePlaylist();
     const auth = useAuth();
     const users = useUsers();
+
+    const playlist = usePlaylist();
+
     const store = useStore();
+
+    const downloadPath = electronApi.getDownloadPath();
     const downloaded = ref(null);
 
     const defalutPlaylist = [
@@ -91,8 +96,6 @@ export default defineComponent({
       model: playlist.Model,
       params,
     });
-
-    const downloadPath = electronApi.getDownloadPath();
 
     watch(user, (val) => {
       console.log('user', val);
@@ -163,7 +166,7 @@ export default defineComponent({
         }
         //
       }
-      LocalStorage.set('playlist', defalutPlaylist.concat(lists));
+      LocalStorage.set('playlists', defalutPlaylist.concat(lists));
       downloaded.value = defalutPlaylist.concat(lists);
     }
 
@@ -191,3 +194,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.invisible-font {
+  background-color: black;
+  color: #aaa;
+  font-size: 0;
+}
+</style>

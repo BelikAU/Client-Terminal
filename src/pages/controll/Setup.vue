@@ -287,7 +287,6 @@
             <q-btn
               outline
               rounded
-              :disable="!ioStore.connect"
               size="16px"
               icon="mdi-close"
               label="Сбросить настройки"
@@ -378,12 +377,12 @@ export default defineComponent({
         children: [
           {
             _id: '0',
-            label: 'image 1',
+            label: 'NO IMAGE',
             header: 'generic',
             data: {
-              link: 'file:///C:///TerminalApps//PlayList//error.png',
-              type: 'image/png',
-              duration: 20,
+              // link: 'file:///C:///TerminalApps//PlayList//error.png',
+              // type: 'image/png',
+              // duration: 20,
             },
           },
         ],
@@ -414,8 +413,8 @@ export default defineComponent({
         mainSetup.value = LocalStorage.getItem('setup');
       }
 
-      if (LocalStorage.has('playlist')) {
-        playlistOptions.value = LocalStorage.getItem('playlist');
+      if (LocalStorage.has('playlists')) {
+        playlistOptions.value = LocalStorage.getItem('playlists');
       } else {
         playlistOptions.value = defalutPlaylists;
       }
