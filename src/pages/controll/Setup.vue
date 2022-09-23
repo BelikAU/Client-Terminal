@@ -7,7 +7,7 @@
         <div class="row q-pb-lg q-px-md">
           <div class="col text-left text-h6">Настройки {{ time }}</div>
           <div class="col text-right">
-            <q-icon v-if="ioStore.connect" size="md" name="mdi-cloud-check" />
+            <q-icon v-if="store.connect" size="md" name="mdi-cloud-check" />
             <q-icon v-else size="md" name="mdi-cloud-off-outline" />
             <span class="q-pl-md">
               <q-icon
@@ -314,7 +314,7 @@
 import { defineComponent, onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar, LocalStorage, date, format } from 'quasar';
-import { useStore } from 'src/store/connection';
+import { useStore } from 'src/store/app';
 // service
 import { api } from 'src/store/';
 import { User, useUsers } from 'src/store/services/users';
@@ -332,7 +332,7 @@ export default defineComponent({
 
     const playlistDialog = ref(false);
 
-    const ioStore = useStore();
+    const store = useStore();
     const connecting = ref(false);
 
     const time = ref(null);
@@ -431,9 +431,8 @@ export default defineComponent({
     });
 
     // save setup data
-
     function saveSetup() {
-      if (ioStore.connect) {
+      if (store.connect) {
         if (mainSetup.value.id == '') {
           auth
             .authenticate({
@@ -547,7 +546,7 @@ export default defineComponent({
     function updateLocalUserSetup() {}
 
     return {
-      ioStore,
+      store,
       auth,
       connecting,
       time,

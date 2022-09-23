@@ -9,14 +9,14 @@ import { api } from 'src/store/';
 import { useAuth } from 'src/store/services/auth';
 // import { User, useUsers } from 'src/store/services/users';
 
-import { useStore } from 'src/store/connection';
+import { useStore } from 'src/store/app';
 // import { useGet } from 'feathers-pinia';
 
 export default defineComponent({
   name: 'App',
   setup() {
     const socket = api.io;
-    const ioStore = useStore();
+    const store = useStore();
 
     const auth = useAuth();
     // const userStore = useUsers();
@@ -49,12 +49,12 @@ export default defineComponent({
     });
 
     socket.on('disconnect', (data) => {
-      ioStore.setConnection(false);
+      store.setConnection(false);
       console.log('disconnect', data);
     });
 
     socket.on('connect', () => {
-      ioStore.setConnection(true);
+      store.setConnection(true);
       console.log('connect', auth);
       auth
         .authenticate()

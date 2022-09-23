@@ -103,13 +103,15 @@ export default defineComponent({
       const curentPlaylist = checkForExist(pl.value, '_id', val.setup.playlist);
       if (curentPlaylist) {
         const setup = LocalStorage.getItem('setup');
-        console.log('curentPlaylist', setup);
+        console.log('curentPlaylist', curentPlaylist);
         setup.playlist = curentPlaylist;
         LocalStorage.set('setup', setup);
 
-        store.playlistDate = new Date();
+        store.playlistDate = {
+          date: new Date().getTime(),
+          label: curentPlaylist.children[0].label,
+        };
       }
-      // console.log('curentPlaylist', curentPlaylist, val.setup.playlist);
     });
 
     watch(pl, (lists) => {
@@ -140,9 +142,11 @@ export default defineComponent({
       }
 
       replaceLink(lists);
+      updatePlaylist();
       if (links.length > 0) {
         electronApi.sendLinkToDownload(links).then(() => {
           console.log('download-finished');
+          // updatePlaylist();
         });
       }
     });
@@ -150,21 +154,19 @@ export default defineComponent({
     function replaceLink(lists) {
       for (const list in lists) {
         for (const child in lists[list].children) {
-          let filePath =
-            'file:///' +
-            downloadPath +
-            '//' +
-            lists[list].children[child].data.link;
+          let link = lists[list].children[child].data.link;
+          console.log('link', link);
+          console.log('link serch', link.search('file:'));
+          if (link.search('file:') === -1) {
+            let filePath =
+              'file:///' +
+              downloadPath +
+              '//' +
+              lists[list].children[child].data.link.replace(/\134/g, '//');
 
-          lists[list].children[child].data.link = filePath.replace(
-            /\134/g,
-            '//'
-          );
-          lists[list].children[child].data.link = lists[list].children[
-            child
-          ].data.link.replace('C:/', 'C://');
+            lists[list].children[child].data.link = filePath;
+          }
         }
-        //
       }
       LocalStorage.set('playlists', defalutPlaylist.concat(lists));
       downloaded.value = defalutPlaylist.concat(lists);
@@ -183,6 +185,25 @@ export default defineComponent({
         return o;
       } else {
         return false;
+      }
+    }
+
+    function updatePlaylist() {
+      const curentPlaylist = checkForExist(
+        pl.value,
+        '_id',
+        user.value.setup.playlist
+      );
+      if (curentPlaylist) {
+        const setup = LocalStorage.getItem('setup');
+        console.log('curentPlaylist 3', curentPlaylist);
+        setup.playlist = curentPlaylist;
+        LocalStorage.set('setup', setup);
+
+        store.playlistDate = {
+          date: new Date().getTime(),
+          label: curentPlaylist.children[0].label,
+        };
       }
     }
 

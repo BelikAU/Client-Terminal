@@ -1,11 +1,11 @@
 import { contextBridge, ipcRenderer, shell } from 'electron';
 import { dialog, app } from '@electron/remote';
+
 import path from 'path';
 import os from 'os';
 
 // store
-const store = require('store');
-
+// const store = require('store');
 // init bot
 // let chatId;
 // let terminalName;

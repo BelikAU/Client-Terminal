@@ -16,7 +16,7 @@
           </div>
           <div class="col-8 q-pt-lg text-center">
             <q-img src="sochipark.svg" width="320px" />
-            <span>v.{{ version }}</span>
+            <span>v.{{ packageInfo.version }}</span>
           </div>
           <div class="col-2">
             <q-knob
@@ -48,7 +48,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { electronApi } from 'src/api/electron-api';
 
 import { LocalStorage } from 'quasar';
-import { version } from '../../package';
+import packageInfo from '../../package.json';
 
 export default defineComponent({
   name: 'SetupLayout',
@@ -88,7 +88,7 @@ export default defineComponent({
     return {
       backRoute,
       duration,
-      version,
+      packageInfo,
       userHasHold() {
         duration.value = 290;
       },

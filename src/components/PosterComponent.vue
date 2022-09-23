@@ -27,7 +27,6 @@
           no-controls
           autoplay
           playsinline
-          loop
           muted
           @ended="onEnd()"
         />
@@ -48,12 +47,12 @@
 <script>
 import { LocalStorage } from 'quasar';
 import { defineComponent, ref, onMounted, watch } from 'vue';
-import { useStore } from 'src/store/connection';
+import { useStore } from 'src/store/app';
 
 export default defineComponent({
   name: 'PosterComponent',
   setup(props) {
-    const slide = ref(4);
+    // const slide = ref(4);
     const poster = ref(null);
     const store = useStore();
 
@@ -66,15 +65,14 @@ export default defineComponent({
     watch(
       () => store.playlistDate,
       (val) => {
-        // console.log('playlistDate updated', val);
+        // console.log('playlist', val);
         playList.value = LocalStorage.getItem('setup').playlist;
-        slide.value = 0;
-        poster.value.next();
+        poster.value.goTo(val.label);
       }
     );
 
     return {
-      slide,
+      slide: ref(null),
       poster,
       onEnd() {
         // console.log('newxt post');
