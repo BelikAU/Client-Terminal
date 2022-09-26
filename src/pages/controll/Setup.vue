@@ -118,21 +118,6 @@
 
             <q-card-section class="q-pt-none">
               <q-tree :nodes="[playlist]" node-key="_id" default-expand-all>
-                <!-- <template v-slot:header-root="prop">
-                  <div class="row items-center full-width text-white">
-                    <div class="col-auto">
-                      <q-icon
-                        name="mdi-playlist-play"
-                        color="orange"
-                        size="28px"
-                        style="width: 50px; height: 50px"
-                      />
-                    </div>
-                    <div class="col-auto text-subtitle2">
-                      {{ prop.node.label }}
-                    </div>
-                  </div>
-                </template> -->
                 <template v-slot:header-generic="prop">
                   <div class="items-center text-white">
                     <div class="row">
@@ -159,34 +144,6 @@
                       </div>
                     </div>
                   </div>
-                  <!-- <div class="items-center text-white">
-                    <div class="row">
-                      <q-icon
-                        :name="prop.node.data.type || 'share'"
-                        color="orange"
-                        size="18px"
-                        class="q-mr-sm"
-                      />
-                      <div class="text-body2">{{ prop.node.label }}</div>
-                    </div>
-                    <div class="col">
-                      <div class="text-caption">
-                        {{ getItemPath(prop.node.data.link) }}
-                      </div> -->
-                  <!-- <div class="text-caption">
-                          {{ prop.node.data.resolution }}
-                        </div> -->
-                  <!-- <div class="text-caption" v-if="prop.node.data.loop">
-                        <q-icon name="mdi-repeat" size="14px" />
-                      </div>
-                      <div
-                        class="text-caption"
-                        v-if="prop.node.data.duration > 0"
-                      >
-                        {{ prop.node.data.duration }} секунд.
-                      </div> -->
-                  <!-- </div>
-                  </div> -->
                 </template>
               </q-tree>
             </q-card-section>
@@ -380,9 +337,9 @@ export default defineComponent({
             label: 'NO IMAGE',
             header: 'generic',
             data: {
-              // link: 'file:///C:///TerminalApps//PlayList//error.png',
-              // type: 'image/png',
-              // duration: 20,
+              link: 'file:///C:///TerminalApps//PlayList//error.png',
+              type: 'image/png',
+              duration: 20,
             },
           },
         ],
@@ -457,58 +414,8 @@ export default defineComponent({
                 message: 'Неверное имя или пароль.',
                 position: 'top',
               });
-              //
-              // const newTerminal = new User({ roles: 'terminal' });
-              // newTerminal.email = mainSetup.value.name;
-              // newTerminal.password = mainSetup.value.password;
-              // newTerminal.timeStamp = Math.floor(Date.now() / 1000);
-              // newTerminal.setup = {
-              //   useShadule: {
-              //     state: mainSetup.value.useShadule,
-              //     onTime: mainSetup.value.onTime,
-              //     offTime: mainSetup.value.offTime,
-              //   },
-              //   backTime: mainSetup.value.backTime,
-              //   playlist: mainSetup.value.playlist,
-              // };
-              // newTerminal
-              //   .save()
-              //   .then((terminal) => {
-              //     mainSetup.value.id = terminal._id;
-              //     // mainSetup.value.playlist = playlist.value;
-              //     LocalStorage.set('setup', mainSetup.value);
-              //     auth
-              //       .authenticate({
-              //         strategy: 'local',
-              //         email: mainSetup.value.name,
-              //         password: mainSetup.value.password,
-              //       })
-              //       .then(() => {
-              //         router.push({ name: 'MenuPage' });
-              //       })
-              //       .catch((error) => {
-              //         console.log('error', error);
-              //         $q.notify({
-              //           color: 'red-5',
-              //           textColor: 'white',
-              //           icon: 'warning',
-              //           message: error.message,
-              //           position: 'top',
-              //         });
-              //       });
-              //   })
-              //   .catch((error) => {
-              //     $q.notify({
-              //       color: 'red-5',
-              //       textColor: 'white',
-              //       icon: 'warning',
-              //       message: error.message,
-              //       position: 'top',
-              //     });
-              //   });
             });
         } else {
-          // mainSetup.value.playlist = playlist.value;
           LocalStorage.set('setup', mainSetup.value);
 
           // update treminal service
@@ -531,7 +438,6 @@ export default defineComponent({
           router.push({ name: 'MenuPage' });
         }
       } else {
-        // mainSetup.value.playlist = playlist.value;
         LocalStorage.set('setup', mainSetup.value);
         router.push({ name: 'MenuPage' });
       }
