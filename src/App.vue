@@ -2,15 +2,13 @@
   <router-view />
 </template>
 <script>
-import { defineComponent, onMounted, watch, ref, computed } from 'vue';
+import { defineComponent, onMounted } from 'vue';
 import { LocalStorage } from 'quasar';
 import { electronApi } from 'src/api/electron-api';
 import { api } from 'src/store/';
 import { useAuth } from 'src/store/services/auth';
-// import { User, useUsers } from 'src/store/services/users';
 
 import { useStore } from 'src/store/app';
-// import { useGet } from 'feathers-pinia';
 
 export default defineComponent({
   name: 'App',
@@ -19,27 +17,6 @@ export default defineComponent({
     const store = useStore();
 
     const auth = useAuth();
-    // const userStore = useUsers();
-
-    // const idT = ref(null);
-
-    // const userID = computed(() => {
-    //   if (idT) {
-    //     return auth.user._id;
-    //   } else {
-    //     return null
-    //   }
-    // });
-    // const tesminalUser = new User();
-
-    // const { item: tesminalUser, isPending } = useGet({
-    //   model: userStore.Model,
-    //   id: idT,
-    // });
-
-    // watch(tesminalUser, (usr) => {
-    //   console.log('watch user', usr);
-    // });
 
     onMounted(() => {
       LocalStorage.set('startTime', new Date());
@@ -60,10 +37,6 @@ export default defineComponent({
         .authenticate()
         .then((val) => {
           console.log('auth status', val);
-          // idT.value = val.user._id;
-          // userStore.get(val.user._id).then((terminal) => {
-          //   tesminalUser.value = terminal;
-          // });
         })
         .catch(() => {
           console.log('no JWT');
@@ -82,6 +55,7 @@ export default defineComponent({
       console.log('connect_error', e);
     });
 
+    // 1 min timer for display OFF
     function checkTimer() {
       const useShadule = LocalStorage.getItem('setup');
       if (useShadule) {
@@ -90,8 +64,6 @@ export default defineComponent({
 
         const _onTime = useShadule.onTime;
         const _offTime = useShadule.offTime;
-
-        // console.log('time: ', _onTime, _offTime, currentTime);
 
         const onTimeArr = _onTime.split(':');
         const onTime = parseInt(onTimeArr[0]) * 60 + parseInt(onTimeArr[1]);

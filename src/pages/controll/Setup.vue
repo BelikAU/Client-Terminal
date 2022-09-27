@@ -317,7 +317,7 @@ import { useQuasar, LocalStorage, date, format } from 'quasar';
 import { useStore } from 'src/store/app';
 // service
 import { api } from 'src/store/';
-import { User, useUsers } from 'src/store/services/users';
+import { useUsers } from 'src/store/services/users';
 import { useAuth } from 'src/store/services/auth';
 
 export default defineComponent({
@@ -457,58 +457,8 @@ export default defineComponent({
                 message: 'Неверное имя или пароль.',
                 position: 'top',
               });
-              //
-              // const newTerminal = new User({ roles: 'terminal' });
-              // newTerminal.email = mainSetup.value.name;
-              // newTerminal.password = mainSetup.value.password;
-              // newTerminal.timeStamp = Math.floor(Date.now() / 1000);
-              // newTerminal.setup = {
-              //   useShadule: {
-              //     state: mainSetup.value.useShadule,
-              //     onTime: mainSetup.value.onTime,
-              //     offTime: mainSetup.value.offTime,
-              //   },
-              //   backTime: mainSetup.value.backTime,
-              //   playlist: mainSetup.value.playlist,
-              // };
-              // newTerminal
-              //   .save()
-              //   .then((terminal) => {
-              //     mainSetup.value.id = terminal._id;
-              //     // mainSetup.value.playlist = playlist.value;
-              //     LocalStorage.set('setup', mainSetup.value);
-              //     auth
-              //       .authenticate({
-              //         strategy: 'local',
-              //         email: mainSetup.value.name,
-              //         password: mainSetup.value.password,
-              //       })
-              //       .then(() => {
-              //         router.push({ name: 'MenuPage' });
-              //       })
-              //       .catch((error) => {
-              //         console.log('error', error);
-              //         $q.notify({
-              //           color: 'red-5',
-              //           textColor: 'white',
-              //           icon: 'warning',
-              //           message: error.message,
-              //           position: 'top',
-              //         });
-              //       });
-              //   })
-              //   .catch((error) => {
-              //     $q.notify({
-              //       color: 'red-5',
-              //       textColor: 'white',
-              //       icon: 'warning',
-              //       message: error.message,
-              //       position: 'top',
-              //     });
-              //   });
             });
         } else {
-          // mainSetup.value.playlist = playlist.value;
           LocalStorage.set('setup', mainSetup.value);
 
           // update treminal service

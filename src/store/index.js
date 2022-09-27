@@ -8,7 +8,7 @@ import socketio from '@feathersjs/socketio-client';
 import io from 'socket.io-client';
 import auth from '@feathersjs/authentication-client';
 
-let ip = 'localhost:3030';
+let ip = process.env.SERVER_URL;
 if (LocalStorage.has('setup')) {
   ip = LocalStorage.getItem('setup').ip;
 }
