@@ -1,7 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <div class="invisible-font">
-      <div>{{ pl }}</div>
       <div>{{ user }}</div>
     </div>
     <q-page-container>
@@ -98,12 +97,9 @@ export default defineComponent({
     });
 
     watch(user, (val) => {
-      console.log('user', val);
-
       const curentPlaylist = checkForExist(pl.value, '_id', val.setup.playlist);
       if (curentPlaylist) {
         const setup = LocalStorage.getItem('setup');
-        console.log('curentPlaylist', curentPlaylist);
         setup.playlist = curentPlaylist;
         LocalStorage.set('setup', setup);
 
@@ -115,14 +111,11 @@ export default defineComponent({
     });
 
     watch(pl, (lists) => {
-      console.log('watch', lists);
       const links = [];
       let current_Playlist = [];
       // chek pl in storage
       if (LocalStorage.has('playlist')) {
         current_Playlist = LocalStorage.getItem('playlist');
-      } else {
-        console.log('new playlist');
       }
 
       for (const list in lists) {
@@ -146,7 +139,6 @@ export default defineComponent({
       if (links.length > 0) {
         electronApi.sendLinkToDownload(links).then(() => {
           console.log('download-finished');
-          // updatePlaylist();
         });
       }
     });
@@ -155,8 +147,8 @@ export default defineComponent({
       for (const list in lists) {
         for (const child in lists[list].children) {
           let link = lists[list].children[child].data.link;
-          console.log('link', link);
-          console.log('link serch', link.search('file:'));
+          // console.log('link', link);
+          // console.log('link serch', link.search('file:'));
           if (link.search('file:') === -1) {
             let filePath =
               'file:///' +
@@ -196,7 +188,6 @@ export default defineComponent({
       );
       if (curentPlaylist) {
         const setup = LocalStorage.getItem('setup');
-        console.log('curentPlaylist 3', curentPlaylist);
         setup.playlist = curentPlaylist;
         LocalStorage.set('setup', setup);
 
@@ -208,9 +199,7 @@ export default defineComponent({
     }
 
     return {
-      pl,
       user,
-      downloaded,
     };
   },
 });
