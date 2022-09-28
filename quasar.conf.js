@@ -26,6 +26,13 @@ module.exports = configure(function (ctx) {
     // https://quasar.dev/quasar-cli/prefetch-feature
     // preFetch: true,
 
+    // env Var
+    env: {
+      SERVER_URL: ctx.dev
+        ? 'http://localhost:3030/'
+        : 'http://10.66.65.127:3030/',
+    },
+
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files

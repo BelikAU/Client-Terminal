@@ -274,7 +274,7 @@ import { useQuasar, LocalStorage, date, format } from 'quasar';
 import { useStore } from 'src/store/app';
 // service
 import { api } from 'src/store/';
-import { User, useUsers } from 'src/store/services/users';
+import { useUsers } from 'src/store/services/users';
 import { useAuth } from 'src/store/services/auth';
 
 export default defineComponent({
