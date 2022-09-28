@@ -155,19 +155,6 @@ app.on('activate', () => {
   }
 });
 
-// bot init
-var mainProcessVars = {
-  somevar: 'name',
-  anothervar: 33,
-};
-
-ipcMain.on('variable-request', function (event, arg) {
-  event.sender.send('variable-reply', [
-    mainProcessVars[arg[0]],
-    mainProcessVars[arg[1]],
-  ]);
-});
-
 ipcMain.on('relaunch', () => {
   app.relaunch();
   app.exit();
@@ -184,7 +171,6 @@ ipcMain.on('showDevTools', () => {
 
 // download posters
 ipcMain.on('download-files', function (event, arg) {
-  // log.info('link mainprocess', arg);
   DownloadManager.bulkDownload(
     {
       urls: arg,
@@ -194,9 +180,6 @@ ipcMain.on('download-files', function (event, arg) {
         log.info('errors: ' + errors);
         return;
       }
-
-      // const downloadPath = app.getPath('userData');
-
       log.info('all finished', finished);
       event.sender.send('download-finished');
     }

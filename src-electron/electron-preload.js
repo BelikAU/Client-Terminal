@@ -4,44 +4,18 @@ import { dialog, app } from '@electron/remote';
 import path from 'path';
 import os from 'os';
 
-// store
-// const store = require('store');
-// init bot
-// let chatId;
-// let terminalName;
-ipcRenderer.send('variable-request', ['somevar', 'anothervar']);
-
-ipcRenderer.on('variable-reply', function (event, args) {
-  console.log(args[0]); // "name"
-  console.log(args[1]); // 33
-
-  // Matches /start
-  // bot.onText(/\/terminal/, function onPhotoText(msg) {
-  //   chatId = msg.chat.id;
-  //   bot.sendMessage(chatId, 'terminal-ok');
-  // });
-  //
-});
-
-ipcRenderer.on('message', function (event, text) {
-  // var container = document.getElementById('messages');
-  // var message = document.createElement('div');
-  // message.innerHTML = text;
-  // container.appendChild(message);
-  console.log('update message', text);
-});
+// ipcRenderer.on('message', function (event, text) {
+//   console.log('update message', text);
+// });
 
 const child = require('child_process').execFile;
 const exec = require('child_process').exec;
-// const exec = require('child_process');
 
 const shutdown = require('electron-shutdown-command');
 const sendkeys = require('sendkeys');
 
 const executTunungPath =
   'C:\\TerminalApps\\iliTuningPackage\\iliTuningTool.exe';
-// const executExplirerPath = 'explorer.exe';
-const executExplirerPath = 'Start .';
 
 contextBridge.exposeInMainWorld('electronApi', {
   openFileDialog: async (title, folder, filters) => {
@@ -73,25 +47,14 @@ contextBridge.exposeInMainWorld('electronApi', {
   },
 
   networkInterfaces: () => {
-    const opts = {
-      reply_markup: {
-        keyboard: [['FAQ'], ['Buy']],
-      },
-      parse_mode: 'Markdown',
-    };
     const response = os.networkInterfaces();
     return response;
   },
 
   disableTouch: (val) => {
     console.log('touchSens', val);
-    // let tim = store.get('terminal_name');
-    // terminalName = tim.split('|')[1];
-    // bot.sendMessage(chatId, terminalName + '* touch error');
     if (val === true) {
-      // shell.openPath('C:\\TerminalApps\\disable_sensor.bat');
     } else {
-      // shell.openPath('C:\\TerminalApps\\enable_sensor.bat');
     }
     return val;
   },
