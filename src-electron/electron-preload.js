@@ -4,9 +4,10 @@ import { dialog, app } from '@electron/remote';
 import path from 'path';
 import os from 'os';
 
-// ipcRenderer.on('message', function (event, text) {
-//   console.log('update message', text);
-// });
+// app update message
+ipcRenderer.on('app-update-event', function (event, event_text) {
+  console.log('app-update-event', event_text);
+});
 
 const child = require('child_process').execFile;
 const exec = require('child_process').exec;
@@ -101,7 +102,7 @@ contextBridge.exposeInMainWorld('electronApi', {
   },
 
   closeDevTools: () => {
-    ipcRenderer.send('closeDevTools');
+    // ipcRenderer.send('closeDevTools');
   },
 
   getPath: () => {

@@ -128,7 +128,9 @@ export default defineComponent({
             )
           ) {
             links.push(
-              'http://localhost:3030/' + lists[list].children[child].data.link
+              'http://' +
+                process.env.SERVER_URL +
+                lists[list].children[child].data.link
             );
           }
         }
@@ -181,20 +183,22 @@ export default defineComponent({
     }
 
     function updatePlaylist() {
-      const curentPlaylist = checkForExist(
-        pl.value,
-        '_id',
-        user.value.setup.playlist
-      );
-      if (curentPlaylist) {
-        const setup = LocalStorage.getItem('setup');
-        setup.playlist = curentPlaylist;
-        LocalStorage.set('setup', setup);
+      if (user.value) {
+        const curentPlaylist = checkForExist(
+          pl.value,
+          '_id',
+          user.value.setup.playlist
+        );
+        if (curentPlaylist) {
+          const setup = LocalStorage.getItem('setup');
+          setup.playlist = curentPlaylist;
+          LocalStorage.set('setup', setup);
 
-        store.playlistDate = {
-          date: new Date().getTime(),
-          label: curentPlaylist.children[0].label,
-        };
+          store.playlistDate = {
+            date: new Date().getTime(),
+            label: curentPlaylist.children[0].label,
+          };
+        }
       }
     }
 

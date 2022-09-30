@@ -26,13 +26,6 @@ module.exports = configure(function (ctx) {
     // https://quasar.dev/quasar-cli/prefetch-feature
     // preFetch: true,
 
-    // env Var
-    env: {
-      SERVER_URL: ctx.dev
-        ? 'http://localhost:3030/'
-        : 'http://10.66.65.127:3030/',
-    },
-
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
@@ -44,7 +37,7 @@ module.exports = configure(function (ctx) {
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       // 'ionicons-v4',
-      'mdi-v5',
+      'mdi-v6',
       // 'fontawesome-v5',
       // 'eva-icons',
       // 'themify',
@@ -59,6 +52,12 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
 
+      // env Var
+      env: {
+        SERVER_URL: ctx.dev
+          ? 'localhost:3030/'
+          : 'lin-navbot.sochi-park.ru:3030/',
+      },
       // transpile: false,
       // publicPath: '/',
 
@@ -216,7 +215,7 @@ module.exports = configure(function (ctx) {
         publish: [
           {
             provider: 'generic',
-            url: 'http://10.68.68.64:3030/update/',
+            url: 'http://lin-navbot.sochi-park.ru:3030/update/',
           },
         ],
         appId: 'ru.belik.sochiparkterminal',

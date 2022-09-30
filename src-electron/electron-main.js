@@ -2,13 +2,13 @@ import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron';
 import { initialize, enable } from '@electron/remote/main';
 import path from 'path';
 import os from 'os';
-// const DeltaUpdater = require('@electron-delta/updater');
+const DeltaUpdater = require('@electron-delta/updater');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
 const DownloadManager = require('electron-download-manager');
 
 DownloadManager.register({
-  downloadFolder: app.getPath('userData') + '/upload',
+  downloadFolder: app.getPath('userData') + '\\upload',
 });
 
 // log
@@ -92,27 +92,34 @@ function createWindow() {
       autoUpdater.checkForUpdates();
     }, 1000 * 60 * 5);
   } catch (error) {
-    logger.error(error);
+    // log.error(error);
     log.info('deltaUpdater error', error);
   }
   // chek version
 }
 
-app.whenReady().then(() => {
-  // const deltaUpdater = new DeltaUpdater({
-  //   logger: require('electron-log'),
-  //   // optionally set the autoUpdater from electron-updater
-  //   autoUpdater: require('electron-updater').autoUpdater,
-  //   // Where delta.json is hosted, for github provider it's not required to set the hostURL
-  //   hostURL: 'http://localhost:3030/update/',
-  // });
+app.whenReady().then(async () => {
+  const deltaUpdater = new DeltaUpdater({
+    logger: require('electron-log'),
+    // optionally set the autoUpdater from electron-updater
+    autoUpdater: require('electron-updater').autoUpdater,
+    // Where delta.json is hosted, for github provider it's not required to set the hostURL
+    hostURL: 'http://' + process.env.SERVER_URL + 'update/',
+  });
+
+  try {
+    await deltaUpdater.boot();
+  } catch (error) {
+    // logger.error(error);
+    log.info('try error deltaUpdater.boot', error);
+  }
 
   createWindow();
 });
 
-function sendStatusToWindow(text) {
-  log.info(text);
-  mainWindow.webContents.send('message', text);
+function sendStatusToWindow(event_text) {
+  log.info(event_text);
+  mainWindow.webContents.send('app-update-event', event_text);
 }
 
 // event
@@ -126,7 +133,7 @@ autoUpdater.on('update-not-available', (ev, info) => {
   sendStatusToWindow('Update not available.');
 });
 autoUpdater.on('error', (ev, err) => {
-  sendStatusToWindow('Error in auto-updater.');
+  sendStatusToWindow('Error in auto-updater.' + err);
 });
 autoUpdater.on('download-progress', (ev, progressObj) => {
   sendStatusToWindow('Download progress...');

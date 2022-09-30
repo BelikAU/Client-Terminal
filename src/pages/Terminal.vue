@@ -58,7 +58,7 @@ export default defineComponent({
     // terminal
     const webview = ref(null);
     const poster = ref(null);
-    const homePage = 'https://www.terminal.sochipark.ru/menu/';
+    const homePage = 'https://terminal.sochipark.ru/menu/';
     // const homePage = 'https://www.sochipark.ru/menu/';
     const terminalURL = ref(homePage);
 
