@@ -107,12 +107,12 @@ app.whenReady().then(async () => {
     hostURL: 'http://' + process.env.SERVER_URL + 'update/',
   });
 
-  try {
-    await deltaUpdater.boot();
-  } catch (error) {
-    // logger.error(error);
-    log.info('try error deltaUpdater.boot', error);
-  }
+  // try {
+  //   await deltaUpdater.boot();
+  // } catch (error) {
+  //   // logger.error(error);
+  //   log.info('try error deltaUpdater.boot', error);
+  // }
 
   createWindow();
 });

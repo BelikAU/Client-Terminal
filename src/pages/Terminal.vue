@@ -35,6 +35,7 @@
 import { electronApi } from 'src/api/electron-api';
 import { defineComponent, onMounted, onUnmounted, ref, computed } from 'vue';
 import PosterComponent from 'components/PosterComponent.vue';
+import { useAuth } from 'src/store/services/auth';
 import { LocalStorage } from 'quasar';
 import anime from 'animejs';
 import { useRouter } from 'vue-router';
@@ -76,6 +77,18 @@ export default defineComponent({
     let touchCount = 0;
     let touchStart = 0;
     let noPoster = false;
+
+    // user
+
+    const auth = useAuth();
+
+    const userID = computed(() => {
+      if (auth.user) {
+        return auth.user._id;
+      } else {
+        return false;
+      }
+    });
 
     onMounted(() => {
       if (LocalStorage.has('setup')) {
@@ -169,9 +182,10 @@ export default defineComponent({
         touchCount++;
         if (touchCount >= 40) {
           console.log('touch error', touchCount);
-          const warning = new Warning({ type: 'mutch_touch' });
-          warning.timeStamp = Math.floor(Date.now() / 1000);
-          warning.save();
+          sendWarning('mutch_touch');
+          // const warning = new Warning({ type: 'mutch_touch' });
+          // warning.timeStamp = Math.floor(Date.now() / 1000);
+          // warning.save();
           touchCount = 0;
         }
       } else if (dif > 5000) {
@@ -185,9 +199,11 @@ export default defineComponent({
       // console.log('stop dif', dif);
       if (dif > 3000) {
         console.log('touch error to long', dif);
-        const warning = new Warning({ type: 'long_touch' });
-        warning.timeStamp = Math.floor(Date.now() / 1000);
-        warning.save();
+        sendWarning('long_touch');
+        // const warning = new Warning({ type: 'long_touch' });
+        // warning.name =  userID.value;
+        // warning.timeStamp = Math.floor(Date.now() / 1000);
+        // warning.save();
       }
     }
 
@@ -207,6 +223,7 @@ export default defineComponent({
     function sendWarning(value) {
       const warning = new Warning({ type: value });
       warning.timeStamp = Math.floor(Date.now() / 1000);
+      warning.name = userID.value;
       warning.save();
       errorSite();
     }
