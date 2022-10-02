@@ -1,6 +1,6 @@
 {
   "name": "sochi-park-navigation",
-  "version": "0.1.0",
+  "version": "0.0.8",
   "description": "Navigation Client Sochi-Park",
   "productName": "Navigation Sochi-Park",
   "author": "Belik A <a.belik@sochi-park.ru>",
@@ -12,7 +12,6 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@electron-delta/updater": "^0.1.17",
     "@feathersjs/authentication-client": "^4.5.14",
     "@feathersjs/feathers": "^4.5.15",
     "@feathersjs/socketio-client": "^4.5.15",

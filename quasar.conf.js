@@ -54,9 +54,7 @@ module.exports = configure(function (ctx) {
 
       // env Var
       env: {
-        SERVER_URL: ctx.dev
-          ? 'localhost:3030/'
-          : 'lin-navbot.sochi-park.ru:3030/',
+        SERVER_URL: ctx.dev ? 'localhost:3030/' : 'localhost:3030/',
       },
       // transpile: false,
       // publicPath: '/',
@@ -215,7 +213,7 @@ module.exports = configure(function (ctx) {
         publish: [
           {
             provider: 'generic',
-            url: 'http://lin-navbot.sochi-park.ru:3030/update/',
+            url: 'http://localhost:3030/update/',
           },
         ],
         appId: 'ru.belik.sochiparkterminal',

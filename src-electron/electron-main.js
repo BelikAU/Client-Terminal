@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron';
 import { initialize, enable } from '@electron/remote/main';
 import path from 'path';
 import os from 'os';
-const DeltaUpdater = require('@electron-delta/updater');
+
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
 const DownloadManager = require('electron-download-manager');
@@ -20,7 +20,6 @@ initialize();
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
-// let vkb;
 
 try {
   if (platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
@@ -36,26 +35,11 @@ function createWindow() {
   /**
    * Initial window options
    */
-  // vkb = new VirtualKeyboard(window.webContents);
-  // display shadule
-  // const { screen } = require('electron');
-
-  // Create a window that fills the screen's available work area.
-  // let displays = screen.getAllDisplays();
-  // let externalDisplay = displays.find((display) => {
-  //   return display.bounds.x !== 0 || display.bounds.y !== 0;
-  // });
-
-  // Create a window that fills the screen's available work area.
-  // const primaryDisplay = screen.getPrimaryDisplay();
-  // const { width, height } = primaryDisplay.workAreaSize;
   mainWindow = new BrowserWindow({
     show: true,
     icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
     backgroundColor: '#000',
 
-    // x: externalDisplay.bounds.x + 10,
-    // y: externalDisplay.bounds.y + 10,
     frame: false,
     kiosk: true,
     webPreferences: {
@@ -69,8 +53,6 @@ function createWindow() {
 
   mainWindow.loadURL(process.env.APP_URL);
   mainWindow.setMenu(null);
-
-  // mainWindow.setPosition(1920, 0);
 
   if (process.env.DEBUGGING) {
     mainWindow.webContents.openDevTools();
@@ -86,34 +68,15 @@ function createWindow() {
 
   enable(mainWindow.webContents);
 
-  try {
-    setInterval(() => {
-      log.info('check for Update ...');
-      autoUpdater.checkForUpdates();
-    }, 1000 * 60 * 5);
-  } catch (error) {
-    // log.error(error);
-    log.info('deltaUpdater error', error);
-  }
-  // chek version
+  // check for Update
+  autoUpdater.checkForUpdates();
+  setInterval(() => {
+    log.info('check for Update ...');
+    autoUpdater.checkForUpdates();
+  }, 1000 * 60 * 60);
 }
 
-app.whenReady().then(async () => {
-  const deltaUpdater = new DeltaUpdater({
-    logger: require('electron-log'),
-    // optionally set the autoUpdater from electron-updater
-    autoUpdater: require('electron-updater').autoUpdater,
-    // Where delta.json is hosted, for github provider it's not required to set the hostURL
-    hostURL: 'http://' + process.env.SERVER_URL + 'update/',
-  });
-
-  // try {
-  //   await deltaUpdater.boot();
-  // } catch (error) {
-  //   // logger.error(error);
-  //   log.info('try error deltaUpdater.boot', error);
-  // }
-
+app.whenReady().then(() => {
   createWindow();
 });
 
