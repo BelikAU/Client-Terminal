@@ -209,11 +209,11 @@ module.exports = configure(function (ctx) {
       },
 
       builder: {
-        // https://www.electron.build/configuration/configuration
+        // https://www.electron.build/configuration/configuration http://lin-navbot.sochi-park.ru/
         publish: [
           {
             provider: 'generic',
-            url: 'http://localhost:3030/update/',
+            url: 'http://lin-navbot.sochi-park.ru:3030/update/',
           },
         ],
         appId: 'ru.belik.sochiparkterminal',
