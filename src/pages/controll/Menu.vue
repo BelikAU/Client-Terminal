@@ -1,105 +1,105 @@
 <template>
-  <div class="text-center flex flex-center" style="height: 800px">
-    <div class="column" style="width: 620px">
-      <!-- Повер -->
-      <div class="row q-col-gutter-lg">
-        <div class="col-6">
-          <q-btn
-            outline
-            class="full-width"
-            size="lg"
-            label="Перезагрузить"
-            @click="reboot()"
-          />
-        </div>
-        <div class="col-6">
-          <q-btn
-            outline
-            class="full-width"
-            size="lg"
-            label="Выключить"
-            @click="shutdown()"
-          />
-        </div>
+  <!-- <div class="text-center flex flex-center" style="height: 800px"> -->
+  <div class="fixed-center" style="width: 620px">
+    <!-- Повер -->
+    <div class="row q-col-gutter-lg">
+      <div class="col-6">
+        <q-btn
+          outline
+          class="full-width"
+          size="lg"
+          label="Перезагрузить"
+          @click="reboot()"
+        />
       </div>
-      <!-- Apps -->
-      <div class="row q-col-gutter-lg q-pt-lg">
-        <div class="col-6">
-          <q-btn
-            outline
-            class="full-width"
-            size="lg"
-            label="Рестарт"
-            @click="restart()"
-          />
-        </div>
-        <div class="col-6">
-          <!--  -->
-          <q-btn
-            outline
-            class="full-width"
-            size="lg"
-            label="DEV TOOLS"
-            @click="showDevTools()"
-          />
-        </div>
+      <div class="col-6">
+        <q-btn
+          outline
+          class="full-width"
+          size="lg"
+          label="Выключить"
+          @click="shutdown()"
+        />
       </div>
-      <!-- Приложения -->
-      <div class="row q-col-gutter-lg">
-        <div class="col-6">
-          <q-btn
-            outline
-            class="full-width"
-            size="lg"
-            label="Explorer"
-            @click="runExplorer()"
-          />
-        </div>
-        <div class="col-6">
-          <q-btn
-            outline
-            class="full-width"
-            size="lg"
-            label="iliTuningTool"
-            @click="runTuning()"
-          />
-        </div>
+    </div>
+    <!-- Apps -->
+    <div class="row q-col-gutter-lg q-py-lg">
+      <div class="col-6">
+        <q-btn
+          outline
+          class="full-width"
+          size="lg"
+          label="Рестарт"
+          @click="restart()"
+        />
       </div>
-      <!--  -->
-      <div class="row q-col-gutter-lg q-pt-lg">
-        <div class="col-6">
-          <q-btn
-            outline
-            class="full-width"
-            size="lg"
-            label="Статистика"
-            @click="goStat"
-          />
-        </div>
-        <div class="col-6">
-          <q-btn
-            outline
-            class="full-width"
-            size="lg"
-            label="Информация"
-            @click="goInfo()"
-          />
-        </div>
+      <div class="col-6">
+        <!--  -->
+        <q-btn
+          outline
+          class="full-width"
+          size="lg"
+          label="DEV TOOLS"
+          @click="showDevTools()"
+        />
       </div>
-      <!--  -->
-      <div class="row q-col-gutter-lg q-pt-lg">
-        <div class="col-12">
-          <q-btn
-            outline
-            class="full-width"
-            size="lg"
-            label="Настройка"
-            @click="goSetup()"
-          />
-        </div>
+    </div>
+    <!-- Приложения -->
+    <div class="row q-col-gutter-lg">
+      <div class="col-6">
+        <q-btn
+          outline
+          class="full-width"
+          size="lg"
+          label="Explorer"
+          @click="runExplorer()"
+        />
+      </div>
+      <div class="col-6">
+        <q-btn
+          outline
+          class="full-width"
+          size="lg"
+          label="iliTuningTool"
+          @click="runTuning()"
+        />
+      </div>
+    </div>
+    <!--  -->
+    <div class="row q-col-gutter-lg q-pt-lg">
+      <div class="col-6">
+        <q-btn
+          outline
+          class="full-width"
+          size="lg"
+          label="Статистика"
+          @click="goStat"
+        />
+      </div>
+      <div class="col-6">
+        <q-btn
+          outline
+          class="full-width"
+          size="lg"
+          label="Информация"
+          @click="goInfo()"
+        />
+      </div>
+    </div>
+    <!--  -->
+    <div class="row q-col-gutter-lg q-pt-lg">
+      <div class="col-12">
+        <q-btn
+          outline
+          class="full-width"
+          size="lg"
+          label="Настройка"
+          @click="goSetup()"
+        />
       </div>
     </div>
   </div>
+  <!-- </div> -->
 </template>
 
 <script>

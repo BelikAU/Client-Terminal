@@ -100,7 +100,13 @@ export default defineComponent({
       const curentPlaylist = checkForExist(pl.value, '_id', val.setup.playlist);
       if (curentPlaylist) {
         const setup = LocalStorage.getItem('setup');
+        console.log('watch user', val);
         setup.playlist = curentPlaylist;
+        setup.backTime = val.setup.backTime;
+        setup.useShadule = val.setup.useShadule.state;
+        setup.offTime = val.setup.useShadule.offTime;
+        setup.onTime = val.setup.useShadule.onTime;
+        setup.name = val.email;
         LocalStorage.set('setup', setup);
 
         store.playlistDate = {
@@ -213,6 +219,6 @@ export default defineComponent({
 .invisible-font {
   background-color: black;
   color: #aaa;
-  font-size: 0;
+  font-size: 30px;
 }
 </style>

@@ -1,57 +1,55 @@
 <template>
-  <div class="text-center flex flex-center" style="height: 1500px">
-    <div class="column" style="width: 320px">
-      <div class="text-h4 q-py-md" style="height: 72px">
-        {{ pass }}
+  <div class="fixed-center" style="width: 320px">
+    <div class="text-h4 q-py-md" style="height: 72px">
+      {{ pass }}
+    </div>
+    <div class="row">
+      <div class="col">
+        <q-btn flat round size="xl" label="1" @click="addNum('1')" />
       </div>
-      <div class="row">
-        <div class="col">
-          <q-btn flat round size="xl" label="1" @click="addNum('1')" />
-        </div>
-        <div class="col">
-          <q-btn flat round size="xl" label="2" @click="addNum('2')" />
-        </div>
-        <div class="col">
-          <q-btn flat round size="xl" label="3" @click="addNum('3')" />
-        </div>
+      <div class="col">
+        <q-btn flat round size="xl" label="2" @click="addNum('2')" />
       </div>
-      <div class="row q-py-md">
-        <div class="col">
-          <q-btn flat round size="xl" label="4" @click="addNum('4')" />
-        </div>
-        <div class="col">
-          <q-btn flat round size="xl" label="5" @click="addNum('5')" />
-        </div>
-        <div class="col">
-          <q-btn flat round size="xl" label="6" @click="addNum('6')" />
-        </div>
+      <div class="col">
+        <q-btn flat round size="xl" label="3" @click="addNum('3')" />
       </div>
-      <div class="row">
-        <div class="col">
-          <q-btn flat round size="xl" label="7" @click="addNum('7')" />
-        </div>
-        <div class="col">
-          <q-btn flat round size="xl" label="8" @click="addNum('8')" />
-        </div>
-        <div class="col">
-          <q-btn flat round size="xl" label="9" @click="addNum('9')" />
-        </div>
+    </div>
+    <div class="row q-py-md">
+      <div class="col">
+        <q-btn flat round size="xl" label="4" @click="addNum('4')" />
       </div>
-      <div class="row q-py-md">
-        <div class="col"></div>
-        <div class="col">
-          <q-btn flat round size="xl" label="0" @click="addNum('0')" />
-        </div>
-        <div class="col">
-          <q-btn
-            flat
-            round
-            padding="lg"
-            size="md"
-            icon="mdi-backspace"
-            @click="delNum()"
-          />
-        </div>
+      <div class="col">
+        <q-btn flat round size="xl" label="5" @click="addNum('5')" />
+      </div>
+      <div class="col">
+        <q-btn flat round size="xl" label="6" @click="addNum('6')" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <q-btn flat round size="xl" label="7" @click="addNum('7')" />
+      </div>
+      <div class="col">
+        <q-btn flat round size="xl" label="8" @click="addNum('8')" />
+      </div>
+      <div class="col">
+        <q-btn flat round size="xl" label="9" @click="addNum('9')" />
+      </div>
+    </div>
+    <div class="row q-py-md">
+      <div class="col"></div>
+      <div class="col">
+        <q-btn flat round size="xl" label="0" @click="addNum('0')" />
+      </div>
+      <div class="col">
+        <q-btn
+          flat
+          round
+          padding="lg"
+          size="md"
+          icon="mdi-backspace"
+          @click="delNum()"
+        />
       </div>
     </div>
   </div>

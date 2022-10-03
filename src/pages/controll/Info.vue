@@ -1,6 +1,6 @@
 <template>
   <div class="text-center flex flex-top">
-    <div class="column text-white text-center full-width">
+    <div class="column text-white text-center full-width fixed-center">
       <!-- title -->
       <div class="row">
         <div class="col-2"></div>
