@@ -229,7 +229,8 @@ export default defineComponent({
     }
 
     function showTerminal() {
-      backTick.value = \;
+      // nepravilno
+      backTick.value = 100;
       posterState.value = false;
       clearInterval(backTimer);
       backTimer = setInterval(updateInterval, 1000);
