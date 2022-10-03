@@ -229,7 +229,7 @@ export default defineComponent({
     }
 
     function showTerminal() {
-      backTick.value = backTime;
+      backTick.value = \;
       posterState.value = false;
       clearInterval(backTimer);
       backTimer = setInterval(updateInterval, 1000);
